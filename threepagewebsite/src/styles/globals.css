@@ -1,10 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Comic+Sans+MS&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@200;300;400;500;800&display=swap');
 @custom-variant dark (&:is(.dark *));
 
 :root {
   --font-size: 16px;
-  --background: #000000;
+  --background: #10101C;
   --foreground: oklch(0.145 0 0);
   --card: #ffffff;
   --card-foreground: oklch(0.145 0 0);
@@ -24,9 +23,11 @@
   --input: transparent;
   --input-background: #f3f3f5;
   --switch-background: #cbced4;
+  --font-weight-extrabold: 800;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
   --font-weight-light: 300;
+  --font-weight-extralight: 200;
   --ring: oklch(0.708 0 0);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -194,4 +195,8 @@ html {
 
 .landing-page {
   font-family: 'Comic Sans MS', sans-serif !important;
+}
+
+.card-header > * + * {
+  margin-top: 1.5rem; /* or whatever spacing you want */
 }

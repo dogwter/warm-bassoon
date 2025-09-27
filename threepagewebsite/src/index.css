@@ -110,6 +110,7 @@
 
   body {
     line-height: inherit;
+    background-color: #10101C !important;
   }
 
   hr {
