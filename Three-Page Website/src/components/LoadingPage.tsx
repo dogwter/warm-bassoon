@@ -1,6 +1,3 @@
-import { Card, CardContent } from "./ui/card";
-import { Progress } from "./ui/progress";
-import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface LoadingPageProps {
@@ -8,65 +5,81 @@ interface LoadingPageProps {
 }
 
 export function LoadingPage({ onLoadingComplete }: LoadingPageProps) {
-  const [progress, setProgress] = useState(0);
-  const [currentStep, setCurrentStep] = useState("Uploading image...");
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
 
-  const steps = [
-    "Uploading image...",
-    "Analyzing content...",
-    "Identifying objects...",
-    "Generating descriptions...",
-    "Finalizing results..."
+  const words = [
+    "Processing",
+    "Analyzing", 
+    "Identifying",
+    "Generating",
+    "Finalizing"
   ];
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        const newProgress = prev + Math.random() * 15 + 5;
-        
-        // Update step based on progress
-        const stepIndex = Math.floor((newProgress / 100) * steps.length);
-        if (stepIndex < steps.length) {
-          setCurrentStep(steps[stepIndex]);
-        }
-        
-        if (newProgress >= 100) {
-          clearInterval(interval);
-          setTimeout(onLoadingComplete, 500);
-          return 100;
-        }
-        
-        return newProgress;
-      });
-    }, 300);
+    // Change the second word every 800ms
+    const wordInterval = setInterval(() => {
+      setCurrentWordIndex((prev) => (prev + 1) % words.length);
+    }, 800);
 
-    return () => clearInterval(interval);
+    // Complete loading after 4 seconds
+    const loadingTimeout = setTimeout(() => {
+      clearInterval(wordInterval);
+      onLoadingComplete();
+    }, 4000);
+
+    return () => {
+      clearInterval(wordInterval);
+      clearTimeout(loadingTimeout);
+    };
   }, [onLoadingComplete]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md mx-auto shadow-lg">
-        <CardContent className="p-8 text-center space-y-6">
-          <div className="flex justify-center">
-            <Loader2 className="w-12 h-12 animate-spin text-primary" />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4">
+      {/* Logo */}
+      <div className="mb-16">
+        <h1 className="text-4xl tracking-wide text-primary">uiverse</h1>
+      </div>
+      
+      {/* Loading text */}
+      <div className="text-center space-y-8">
+        <div className="text-2xl text-foreground">
+          <span>AI </span>
+          <div className="inline-block min-w-[140px] text-left h-8 overflow-hidden relative">
+            <div 
+              className="flex flex-col transition-transform duration-500 ease-in-out"
+              style={{
+                transform: `translateY(-${currentWordIndex * 32}px)`, // 32px = 2rem (h-8)
+              }}
+            >
+              {/* Create a continuous loop by duplicating the words */}
+              {[...words, ...words].map((word, index) => (
+                <div 
+                  key={`${word}-${index}`} 
+                  className="h-8 flex items-center"
+                >
+                  {word}
+                </div>
+              ))}
+            </div>
           </div>
-          
-          <div className="space-y-2">
-            <h2 className="text-xl">Processing Your Image</h2>
-            <p className="text-muted-foreground">
-              Our AI is analyzing your image to provide detailed insights
-            </p>
-          </div>
-          
-          <div className="space-y-3">
-            <Progress value={progress} className="w-full" />
-            <p className="text-sm text-muted-foreground">{currentStep}</p>
-            <p className="text-xs text-muted-foreground">
-              {Math.round(progress)}% complete
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+        </div>
+        
+        {/* Animated dots */}
+        <div className="flex justify-center space-x-2">
+          <div 
+            className="w-3 h-3 bg-primary rounded-full animate-bounce"
+            style={{ animationDelay: '0ms', animationDuration: '1s' }}
+          ></div>
+          <div 
+            className="w-3 h-3 bg-primary rounded-full animate-bounce"
+            style={{ animationDelay: '150ms', animationDuration: '1s' }}
+          ></div>
+          <div 
+            className="w-3 h-3 bg-primary rounded-full animate-bounce"
+            style={{ animationDelay: '300ms', animationDuration: '1s' }}
+          ></div>
+        </div>
+      </div>
     </div>
   );
 }
