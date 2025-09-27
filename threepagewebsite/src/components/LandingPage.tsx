@@ -20,10 +20,11 @@ export function LandingPage({ onImageUpload }: LandingPageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: "#10101C" }}>
       <Card className="w-full max-w-md mx-auto shadow-lg">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Image Analyzer</CardTitle>
+          <CardTitle className="text-lg">instant insights</CardTitle>
+          <CardTitle className="text-lg">detailed descriptions</CardTitle>
           <CardDescription>
             Upload an image to get detailed insights and descriptions of its contents
           </CardDescription>

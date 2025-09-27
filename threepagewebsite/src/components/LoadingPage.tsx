@@ -34,7 +34,7 @@ export function LoadingPage({ onLoadingComplete }: LoadingPageProps) {
   }, [onLoadingComplete]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "#10101C" }}>
       {/* Logo */}
       <div className="mb-16">
         <h1 className="text-4xl tracking-wide text-primary">uiverse</h1>

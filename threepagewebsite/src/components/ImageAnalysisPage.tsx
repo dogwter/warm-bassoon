@@ -77,7 +77,7 @@ export function ImageAnalysisPage({ imageUrl, onBack, onNewImageUpload }: ImageA
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="min-h-screen p-4" style={{ backgroundColor: "#10101C" }}>
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Header */}
         <Card>
