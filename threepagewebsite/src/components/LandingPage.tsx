@@ -1,6 +1,7 @@
 import { Button } from "./ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Upload } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 interface LandingPageProps {
   onImageUpload: (file: File) => void;
@@ -19,9 +20,49 @@ export function LandingPage({ onImageUpload }: LandingPageProps) {
     input?.click();
   };
 
+  // Cursor effect logic
+  const cursorRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (cursorRef.current) {
+        cursorRef.current.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+      }
+    };
+    document.addEventListener("mousemove", handleMouseMove);
+    return () => document.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4" style={{ backgroundColor: "#10101C" }}>
-      <div className="flex items-center">
+    <div
+      className="min-h-screen flex flex-col items-center justify-center p-4"
+      style={{
+        backgroundColor: "#10101C",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {/* Gradient cursor effect */}
+      <div
+        ref={cursorRef}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "250px",
+          height: "250px",
+          borderRadius: "50%",
+          pointerEvents: "none",
+          background:
+            "radial-gradient(circle at center, #B6B6FC 0%, #D4B6FC 10%, #5D5DA0 30%)",
+          mixBlendMode: "screen",
+          transform: "translate(-40%, -50%)",
+          filter: "blur(250px)",
+          transition: "transform 0.15s ease-out",
+          zIndex: 100,
+        }}
+      />
+      <div className="flex items-center" style={{ position: "relative", zIndex: 1 }}>
         <span
           className="font-extrabold"
           style={{
@@ -60,6 +101,8 @@ export function LandingPage({ onImageUpload }: LandingPageProps) {
           WebkitTextFillColor: "transparent",
           backgroundClip: "text",
           color: "transparent",
+          position: "relative",
+          zIndex: 1,
         }}
       >
         your personalised AI guide to the UI/UX universe
@@ -73,6 +116,8 @@ export function LandingPage({ onImageUpload }: LandingPageProps) {
           background: "#D9D9D9",
           boxShadow: "0 0 0 1px #5D5DA0 inset, 0 0 8px 6px #5D5DA0",
           filter: "blur(0px)",
+          position: "relative",
+          zIndex: 1,
         }}
       >
         <CardHeader className="text-center">
@@ -83,7 +128,7 @@ export function LandingPage({ onImageUpload }: LandingPageProps) {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <Button 
+          <Button
             onClick={triggerFileInput}
             className="w-full h-12 flex items-center gap-2"
             size="lg"
@@ -92,7 +137,7 @@ export function LandingPage({ onImageUpload }: LandingPageProps) {
             <Upload className="w-5 h-5" />
             upload
           </Button>
-          
+
           <input
             id="file-input"
             type="file"
@@ -100,7 +145,7 @@ export function LandingPage({ onImageUpload }: LandingPageProps) {
             onChange={handleFileSelect}
             className="hidden"
           />
-          
+
           <p className="text-xs text-muted-foreground text-center">
             supported formats: JPG, PNG
           </p>
