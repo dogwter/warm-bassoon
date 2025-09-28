@@ -1,10 +1,6 @@
 import express from "express";
 import cors from "cors";
 import multer from "multer";
-import fs from "fs";
-import dotenv from "dotenv";
-dotenv.config();
-
 import {
   GoogleGenAI,
   createUserContent,
@@ -15,15 +11,9 @@ const app = express();
 app.use(cors());
 
 const upload = multer({ storage: multer.memoryStorage() });
-const ai = new GoogleGenAI({
-  apiKey: process.env.GOOGLE_API_KEY,
-});
-
+const ai = new GoogleGenAI({apiKey: process.env.GOOGLE_API_KEY,});
 
 app.post("/analyze-image", upload.single("image"), async (req, res) => {
-  const models = await ai.listModels();
-  console.log(models);
-
   try {
     const buffer = req.file.buffer;
     const base64 = buffer.toString("base64");
@@ -38,7 +28,8 @@ app.post("/analyze-image", upload.single("image"), async (req, res) => {
       model: "gemini-2.5-flash",
       contents,
     });
-    // console.log("Gemini caption:", response.text);
+
+    console.log("Gemini caption:", response.text); 
     res.json({ caption: response.text });
   } catch (error) {
     console.error("Gemini error:", error.message);

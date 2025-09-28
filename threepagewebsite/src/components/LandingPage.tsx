@@ -16,7 +16,7 @@ export function LandingPage({ onImageUpload }: LandingPageProps) {
   formData.append("image", file); 
 
   try {
-    const response = await fetch("http://localhost:3001/analyze-image", {
+    const response = await fetch("http://localhost:5000/analyze-image", {
       method: "POST",
       body: formData,
     });
