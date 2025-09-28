@@ -17,7 +17,7 @@ interface AnalysisResult {
 }
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<AppState>('landing');
+  const [currentPage, setCurrentPage] = useState<AppState>('landing'); //CHANGE BACK TO LANDING LATER
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [analysisData, setAnalysisData] = useState<AnalysisResult | null>(null);
   const [analysisError, setAnalysisError] = useState<boolean>(false);
