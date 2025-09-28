@@ -8,13 +8,28 @@ interface LandingPageProps {
 }
 
 export function LandingPage({ onImageUpload }: LandingPageProps) {
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file && file.type.startsWith('image/')) {
-      onImageUpload(file);
-    }
-  };
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const file = event.target.files?.[0];
+  if (!file || !file.type.startsWith("image/")) return;
 
+  const formData = new FormData();
+  formData.append("image", file); 
+
+  try {
+    const response = await fetch("http://localhost:3001/analyze-image", {
+      method: "POST",
+      body: formData,
+    });
+    //console.log(formData)
+
+    const data = await response.json();
+    console.log("Gemini caption:", data.caption);
+    onImageUpload(file); 
+  } catch (error) {
+    console.error("Upload error:", error instanceof Error ? error.message : error);
+
+  }
+};
   const triggerFileInput = () => {
     const input = document.getElementById('file-input') as HTMLInputElement;
     input?.click();
