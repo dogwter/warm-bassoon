@@ -8,11 +8,15 @@ type AppState = 'landing' | 'loading' | 'analysis';
 export default function App() {
   const [currentState, setCurrentState] = useState<AppState>('landing');
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [analysisResult, setAnalysisResult] = useState<any>(null);
+  const [currentFile, setCurrentFile] = useState<File | null>(null);
 
   const handleImageUpload = (file: File) => {
     // Create a URL for the uploaded file
     const imageUrl = URL.createObjectURL(file);
     setUploadedImage(imageUrl);
+    setCurrentFile(file);
+    setAnalysisResult(null); // Reset analysis result
     setCurrentState('loading');
   };
 
@@ -26,6 +30,8 @@ export default function App() {
       URL.revokeObjectURL(uploadedImage);
     }
     setUploadedImage(null);
+    setAnalysisResult(null);
+    setCurrentFile(null);
     setCurrentState('landing');
   };
 
@@ -37,6 +43,8 @@ export default function App() {
     // Create a URL for the new uploaded file
     const imageUrl = URL.createObjectURL(file);
     setUploadedImage(imageUrl);
+    setCurrentFile(file);
+    setAnalysisResult(null); // Reset analysis result
     setCurrentState('loading');
   };
 
@@ -54,12 +62,19 @@ export default function App() {
       return <LandingPage onImageUpload={handleImageUpload} />;
     
     case 'loading':
-      return <LoadingPage onLoadingComplete={handleLoadingComplete} />;
+      return (
+        <LoadingPage 
+          file={currentFile}
+          onLoadingComplete={handleLoadingComplete}
+          onAnalysisComplete={setAnalysisResult}
+        />
+      );
     
     case 'analysis':
       return uploadedImage ? (
         <ImageAnalysisPage 
           imageUrl={uploadedImage} 
+          analysisResult={analysisResult}
           onBack={handleBackToLanding}
           onNewImageUpload={handleNewImageUpload}
         />

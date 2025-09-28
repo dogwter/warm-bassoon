@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+</head>
+<body>
+    <h1>Backend API Test</h1>
+    <button onclick="testHealth()">Test Health Endpoint</button>
+    <button onclick="testImageUpload()">Test Image Upload</button>
+    <div id="results"></div>
+
+    <script>
+        async function testHealth() {
+            try {
+                const response = await fetch('http://localhost:5000/health');
+                const data = await response.json();
+                document.getElementById('results').innerHTML = `<p>Health: ${JSON.stringify(data)}</p>`;
+            } catch (error) {
+                document.getElementById('results').innerHTML = `<p>Health Error: ${error.message}</p>`;
+            }
+        }
+
+        async function testImageUpload() {
+            try {
+                // Create a simple test FormData
+                const formData = new FormData();
+                
+                const response = await fetch('http://localhost:5000/analyze-image', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                document.getElementById('results').innerHTML = `<p>Upload: ${JSON.stringify(data)}</p>`;
+            } catch (error) {
+                document.getElementById('results').innerHTML = `<p>Upload Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

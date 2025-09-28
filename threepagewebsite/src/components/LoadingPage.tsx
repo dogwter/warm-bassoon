@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react"; 
 
 interface LoadingPageProps {
+  file: File | null;
   onLoadingComplete: () => void;
-  analysisData?: any; // Analysis result from parent
-  analysisError?: boolean; // Error state from parent
+  onAnalysisComplete: (analysis: any) => void;
 }
 
 export function LoadingPage({
+  file,
   onLoadingComplete,
-  analysisData,
-  analysisError,
+  onAnalysisComplete,
 }: LoadingPageProps) {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [minTimeElapsed, setMinTimeElapsed] = useState(false);
+  const [analysisData, setAnalysisData] = useState<any>(null);
+  const [analysisError, setAnalysisError] = useState(false);
   const words = [
     " Structure",
     " Fonts",
@@ -20,6 +22,37 @@ export function LoadingPage({
     " Interface",
     " Colors",
   ];
+
+  // Make API call when component mounts
+  useEffect(() => {
+    const makeApiCall = async () => {
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append("image", file);
+
+      try {
+        const response = await fetch("http://localhost:5000/analyze-image", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("API response during loading:", data.analysis);
+        setAnalysisData(data.analysis);
+        onAnalysisComplete(data.analysis);
+      } catch (error) {
+        console.error("API call failed during loading:", error);
+        setAnalysisError(true);
+      }
+    };
+
+    makeApiCall();
+  }, [file, onAnalysisComplete]);
 
   useEffect(() => {
     // Change the word every 1000ms

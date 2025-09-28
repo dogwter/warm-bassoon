@@ -4,32 +4,17 @@ import { Upload } from "lucide-react";
 import { useEffect, useRef } from "react";
 
 interface LandingPageProps {
-  onImageUpload: (file: File) => void;
+  onImageUpload: (file: File, analysis?: any) => void;
 }
 
 export function LandingPage({ onImageUpload }: LandingPageProps) {
-  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
-  const file = event.target.files?.[0];
-  if (!file || !file.type.startsWith("image/")) return;
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !file.type.startsWith("image/")) return;
 
-  const formData = new FormData();
-  formData.append("image", file); 
-
-  try {
-    const response = await fetch("http://localhost:5000/analyze-image", {
-      method: "POST",
-      body: formData,
-    });
-    //console.log(formData)
-
-    const data = await response.json();
-    console.log("Gemini caption:", data.caption);
-    onImageUpload(file); 
-  } catch (error) {
-    console.error("Upload error:", error instanceof Error ? error.message : error);
-
-  }
-};
+    // Immediately go to loading page with the file
+    onImageUpload(file);
+  };
   const triggerFileInput = () => {
     const input = document.getElementById('file-input') as HTMLInputElement;
     input?.click();
